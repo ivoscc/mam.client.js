@@ -18,7 +18,7 @@ program
     const start = program.start || 0;
     const count = program.count || 1;
 
-    const channelKey = Crypto.converter.trytes(MAM.channelKey(Encryption.hash(Encryption.increment(Crypto.converter.trits(seed.slice()))), channelKeyIndex));
+    const channelKey = Crypto.converter.trytes(Encryption.hash(Encryption.increment(Crypto.converter.trits(seed.slice()))));
 
     const tree0 = new MerkleTree(seed, start, count, securityLevel);
     const tree1 = new MerkleTree(seed, start + count, count, securityLevel);
@@ -27,7 +27,7 @@ program
     const iota = new IOTA();
 
     // Get the trytes of the MAM transactions
-    const trytes = new MAM.create({
+    const mam = new MAM.create({
         message: iota.utils.toTrytes(message),
         merkleTree: tree0,
         index: index,
@@ -35,6 +35,6 @@ program
         channelKey: channelKey,
     });
 
-    console.log(JSON.stringify(trytes));
+    process.stdout.write(JSON.stringify(mam.trytes));
   })
   .parse(process.argv);
